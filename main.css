@@ -1,0 +1,15 @@
+.node:not(.root>.node):not(.root.node) {
+    padding-left: 20px;
+}
+
+.list:not(.root>.list) {
+    padding-left: 20px;
+}
+
+.list, .node {
+    margin: 3px 0 3px;
+}
+
+.node-title .name {
+    font-weight: 700;
+}
