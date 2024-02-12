@@ -1,3 +1,5 @@
+
+// * Псевдо API
 const response = {
     services: [
         {
@@ -97,7 +99,7 @@ const services = response.services;
 renderTreeInRoot(root, services);
 
 function renderTreeInRoot(root, data) {
-    data = sortData(services);
+    data = sortTreeData(data);
 
     for (const item of data) {
         let html = "";
@@ -105,10 +107,9 @@ function renderTreeInRoot(root, data) {
         if (item.node === 1) html = createNode(item);
         else if (item.node === 0) html = createList(item);
 
-        let parent =
-            item.head === null
-                ? root
-                : document.getElementsByClassName(`node-${item.head}`)[0];
+        let parent = item.head === null
+                    ? root
+                    : document.getElementsByClassName(`node-${item.head}`)[0];
 
         parent?.appendChild(html);
     }
@@ -116,8 +117,7 @@ function renderTreeInRoot(root, data) {
     // sortAllTree();
 }
 
-
-function sortData(data) {
+function sortTreeData(data) {
     let sortedData = [];
 
     const nodesFromRoot = data.filter((el) => el.head === null);
@@ -127,43 +127,16 @@ function sortData(data) {
     nodesFromRoot.forEach((el) => sortedData.push(el));
 
     for (const item of data) {
-        const childs = data.filter((el) => {
-            return el.head === item.id;
-        });
+        const childs = data.filter((el) => el.head === item.id);
 
-        console.log(childs);
-
-        childs.sort((first, second) => {
-            return first.sorthead - second.sorthead;
-        });
+        childs.sort((first, second) =>  first.sorthead - second.sorthead);
 
         childs.forEach((el) => {
-            if (!sortedData.includes(el)) {
-                sortedData.push(el);
-            }
+            if (!sortedData.includes(el)) sortedData.push(el);
         });
     }
 
     return sortedData;
-}
-
-function sortAllTree() {
-    const nodes = document.getElementsByClassName("node");
-
-    for (const node of nodes) {
-        const childs = Array.prototype.slice.call(node?.childNodes);
-
-        childs.sort((first, second) => {
-            first = first.classList.value?.split("sorthead-")[1];
-            second = second.classList.value?.split("sorthead-")[1];
-
-            return first - second;
-        });
-
-        childs.forEach((el) => {
-            node.appendChild(el);
-        });
-    }
 }
 
 function createList(item) {
@@ -185,3 +158,23 @@ function createNode(item) {
 
     return html;
 }
+
+// * Функция сортировки дерева уже после его отрисовки
+// function sortAllTree() {
+//     const nodes = document.getElementsByClassName("node");
+
+//     for (const node of nodes) {
+//         const childs = Array.prototype.slice.call(node?.childNodes);
+
+//         childs.sort((first, second) => {
+//             first = first.classList.value?.split("sorthead-")[1];
+//             second = second.classList.value?.split("sorthead-")[1];
+
+//             return first - second;
+//         });
+
+//         childs.forEach((el) => {
+//             node.appendChild(el);
+//         });
+//     }
+// }
